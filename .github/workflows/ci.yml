@@ -42,7 +42,7 @@ jobs:
       - name: Build unsigned device IPA
         run: |
           xcodebuild -project SimpleChat.xcodeproj -scheme SimpleChat \
-            -destination 'generic/platform=iOS' \
+            -destination 'generic/platform=iOS' -configuration Release \
             -derivedDataPath build-device build CODE_SIGNING_ALLOWED=NO CODE_SIGN_IDENTITY="" -quiet
           APP=$(find build-device/Build/Products -name "SimpleChat.app" -path "*iphoneos*" | head -1)
           echo "Device app: $APP"
