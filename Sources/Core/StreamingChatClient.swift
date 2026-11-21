@@ -82,6 +82,9 @@ final class StreamingChatClient: @unchecked Sendable {
             config.timeoutIntervalForRequest = 120
             config.timeoutIntervalForResource = 600
             config.requestCachePolicy = .reloadIgnoringLocalCacheData
+            // 不使用系统代理：避免 iOS 代理/VPN 配置里数字端口触发 CFNetwork 转义崩溃
+            // （-[__NSCFNumber length]: unrecognized selector @ CFURLCreateStringByAddingPercentEscapes）
+            config.connectionProxyDictionary = [:]
             self.session = URLSession(configuration: config)
         }
     }

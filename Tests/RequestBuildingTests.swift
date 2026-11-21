@@ -34,6 +34,31 @@ final class RequestBuildingTests: XCTestCase {
         XCTAssertNil(URLNormalizer.chatURL(endpoint: "", style: .anthropic))
     }
 
+    func testDirtyInputRejected() {
+        // 非 ASCII host / 内部空白 → 拒绝（这些输入走 CFNetwork 转义路径有已知崩溃面）
+        XCTAssertNil(URLNormalizer.chatURL(endpoint: "https://中文.域名.com", style: .openAICompatible))
+        XCTAssertNil(URLNormalizer.chatURL(endpoint: "https://api .deepseek.com", style: .openAICompatible))
+        XCTAssertNil(URLNormalizer.chatURL(endpoint: "https://api.deepseek.com/v1 chat", style: .openAICompatible))
+    }
+
+    func testPortAndIPHost() {
+        XCTAssertEqual(
+            URLNormalizer.chatURL(endpoint: "http://192.168.1.20:8080", style: .openAICompatible)?.absoluteString,
+            "http://192.168.1.20:8080/v1/chat/completions"
+        )
+        XCTAssertEqual(
+            URLNormalizer.chatURL(endpoint: "https://api.example.com:8443/v1", style: .anthropic)?.absoluteString,
+            "https://api.example.com:8443/v1/messages"
+        )
+    }
+
+    func testNonASCIIPathPercentEncoded() {
+        let url = URLNormalizer.chatURL(endpoint: "https://api.deepseek.com/v1/聊天", style: .openAICompatible)
+        XCTAssertNotNil(url)
+        XCTAssertTrue(url!.absoluteString.contains("%E8%81%8A%E5%A4%A9"))
+        XCTAssertTrue(url!.absoluteString.hasSuffix("/chat/completions"))
+    }
+
     // MARK: - OpenAI 兼容请求组装
 
     func testOpenAIRequestBody() throws {

@@ -11,7 +11,7 @@ enum ChatError: LocalizedError, Sendable {
 
     var errorDescription: String? {
         switch self {
-        case .badURL: return "端点 URL 无法解析，请检查设置里的地址"
+        case .badURL: return "端点 URL 无法解析：必须是 http(s):// + 纯英文域名，不能含空格或中文/emoji"
         case .badResponse: return "服务端响应不是 HTTP（代理或网关异常？）"
         case .http(let code, let message): return "HTTP \(code)：\(message)"
         case .api(let message): return message
@@ -45,21 +45,38 @@ enum URLNormalizer {
     static func chatURL(endpoint: String, style: ProviderStyle) -> URL? {
         var trimmed = endpoint.trimmingCharacters(in: .whitespacesAndNewlines)
         while trimmed.hasSuffix("/") { trimmed.removeLast() }
-        let lower = trimmed.lowercased()
-        guard lower.hasPrefix("https://") || lower.hasPrefix("http://") else { return nil }
+        // 内部空白/控制字符一律拒绝（URLSession 的转义路径对脏输入不可靠）
+        guard !trimmed.isEmpty,
+              !trimmed.contains(where: { $0.isWhitespace || $0.isNewline }),
+              var components = URLComponents(string: trimmed),
+              let scheme = components.scheme?.lowercased(),
+              scheme == "http" || scheme == "https",
+              let host = components.host, !host.isEmpty,
+              // host 必须纯 ASCII（中文/emoji 域名走 CFNetwork 转义路径有已知崩溃面）
+              host.allSatisfy({ $0.isASCII })
+        else { return nil }
 
+        var path = components.path
         switch style {
         case .openAICompatible:
-            if trimmed.hasSuffix("/chat/completions") { return URL(string: trimmed) }
-            if trimmed.hasSuffix("/v1") || trimmed.hasSuffix("/v1beta") {
-                return URL(string: trimmed + "/chat/completions")
+            if !path.hasSuffix("/chat/completions") {
+                if path.hasSuffix("/v1") || path.hasSuffix("/v1beta") {
+                    path += "/chat/completions"
+                } else {
+                    path += "/v1/chat/completions"
+                }
             }
-            return URL(string: trimmed + "/v1/chat/completions")
         case .anthropic:
-            if trimmed.hasSuffix("/messages") { return URL(string: trimmed) }
-            if trimmed.hasSuffix("/v1") { return URL(string: trimmed + "/messages") }
-            return URL(string: trimmed + "/v1/messages")
+            if !path.hasSuffix("/messages") {
+                if path.hasSuffix("/v1") {
+                    path += "/messages"
+                } else {
+                    path += "/v1/messages"
+                }
+            }
         }
+        components.path = path
+        return components.url
     }
 }
 
