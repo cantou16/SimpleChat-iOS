@@ -135,8 +135,12 @@ final class ChatStore: ObservableObject {
             let history = self.conversation(conversationID)?.messages.dropLast().map { $0 } ?? []
             let events = self.client.stream(config: config, messages: history)
 
-            for try await event in events {
-                self.apply(event: event, conversationID: conversationID, assistantID: assistantID)
+            do {
+                for try await event in events {
+                    self.apply(event: event, conversationID: conversationID, assistantID: assistantID)
+                }
+            } catch {
+                self.lastError = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
             }
             self.finishStreaming(conversationID: conversationID, assistantID: assistantID)
         }

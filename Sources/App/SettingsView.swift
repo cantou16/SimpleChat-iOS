@@ -7,7 +7,7 @@ struct SettingsView: View {
     @State private var endpoint: String = ""
     @State private var style: ProviderStyle = .openAICompatible
     @State private var model: String = ""
-    @State private var apiKey: String = ""
+    @State private var draftKey: String = ""
     @State private var systemPrompt: String = ""
 
     var body: some View {
@@ -26,7 +26,7 @@ struct SettingsView: View {
                     TextField("模型（如 deepseek-chat）", text: $model)
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
-                    SecureField("API Key", text: $apiKey)
+                    SecureField("API Key", text: $draftKey)
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
                 }
@@ -61,7 +61,7 @@ struct SettingsView: View {
         style = s.style
         model = s.model
         systemPrompt = s.systemPrompt
-        apiKey = store.currentAPIKey()
+        draftKey = store.currentAPIKey()
     }
 
     private func save() {
@@ -71,7 +71,7 @@ struct SettingsView: View {
         s.model = model.trimmingCharacters(in: .whitespacesAndNewlines)
         s.systemPrompt = systemPrompt
         store.settings = s
-        store.storeAPIKey(apiKey.trimmingCharacters(in: .whitespacesAndNewlines))
+        store.storeAPIKey(draftKey.trimmingCharacters(in: .whitespacesAndNewlines))
         dismiss()
     }
 }

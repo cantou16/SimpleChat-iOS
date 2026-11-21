@@ -141,7 +141,7 @@ struct MessageBubble: View {
             if message.role == .user { Spacer(minLength: 40) }
             VStack(alignment: .leading, spacing: 6) {
                 if let reasoning = message.reasoning, !reasoning.isEmpty {
-                    DisclosureGroup(isPresented: $showReasoning) {
+                    DisclosureGroup(isExpanded: $showReasoning) {
                         ScrollView {
                             Text(reasoning)
                                 .font(.footnote)
