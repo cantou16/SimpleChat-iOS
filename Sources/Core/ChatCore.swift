@@ -22,7 +22,7 @@ enum ChatError: LocalizedError, Sendable {
 
 // MARK: - 流事件
 
-enum ChatEvent: Sendable {
+enum ChatEvent: Sendable, Equatable {
     case textDelta(String)
     case reasoningDelta(String)
     case finished

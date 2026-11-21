@@ -66,7 +66,7 @@ final class SSEParserTests: XCTestCase {
         XCTAssertThrowsError(try parser.feed(
             line: #"data: {"type":"error","error":{"type":"invalid_request_error","message":"bad"}}"#
         )) { error in
-            guard case ChatError.api(let m) = error else {
+            guard let chatError = error as? ChatError, case .api(let m) = chatError else {
                 return XCTFail("应为 ChatError.api")
             }
             XCTAssertEqual(m, "bad")

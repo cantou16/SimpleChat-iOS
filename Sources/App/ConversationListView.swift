@@ -7,11 +7,16 @@ struct ConversationListView: View {
     var body: some View {
         Group {
             if store.conversations.isEmpty {
-                ContentUnavailableView(
-                    "SimpleChat",
-                    systemImage: "bubble.left.and.text.bubble.right",
-                    description: Text("深呼吸，和 AI 聊点什么。\n先到设置里配好 API。")
-                )
+                VStack(spacing: 12) {
+                    Image(systemName: "bubble.left.and.text.bubble.right")
+                        .font(.system(size: 44))
+                        .foregroundStyle(.secondary)
+                    Text("SimpleChat").font(.title2).bold()
+                    Text("和 AI 聊点什么。\n先到设置里配好 API 端点。")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                }
             } else {
                 List {
                     ForEach(store.conversations) { conv in

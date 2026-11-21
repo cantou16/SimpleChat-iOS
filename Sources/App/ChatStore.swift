@@ -131,14 +131,14 @@ final class ChatStore: ObservableObject {
 
         let assistantID = assistant.id
         streamTask = Task { [weak self] in
-            let history = self?.conversation(conversationID)?.messages.dropLast().map { $0 } ?? []
-            let events = self?.client.stream(config: config, messages: history)
+            guard let self else { return }
+            let history = self.conversation(conversationID)?.messages.dropLast().map { $0 } ?? []
+            let events = self.client.stream(config: config, messages: history)
 
-            for try await event in events ?? EmptyAsyncSequence() {
-                guard let self else { break }
+            for try await event in events {
                 self.apply(event: event, conversationID: conversationID, assistantID: assistantID)
             }
-            self?.finishStreaming(conversationID: conversationID, assistantID: assistantID)
+            self.finishStreaming(conversationID: conversationID, assistantID: assistantID)
         }
     }
 
@@ -180,11 +180,3 @@ final class ChatStore: ObservableObject {
     }
 }
 
-/// for-await 的空序列兜底
-struct EmptyAsyncSequence: AsyncSequence {
-    typealias Element = ChatEvent
-    struct AsyncIterator: AsyncIteratorProtocol {
-        mutating func next() async throws -> ChatEvent? { nil }
-    }
-    func makeAsyncIterator() -> AsyncIterator { AsyncIterator() }
-}
