@@ -1,0 +1,61 @@
+name: iOS CI
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test-and-build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate Xcode project
+        run: brew install xcodegen && cd ios && xcodegen generate
+
+      - name: Build + run unit tests (iOS Simulator)
+        run: |
+          cd ios
+          xcodebuild -project SimpleChat.xcodeproj -scheme SimpleChat \
+            -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
+            -derivedDataPath build test CODE_SIGNING_ALLOWED=NO -quiet
+
+      - name: Launch in simulator + screenshot (proof it runs)
+        run: |
+          cd ios
+          UDID=$(xcrun simctl list devices available | grep "iPhone 16 (" | head -1 | grep -oE '[A-F0-9-]{36}')
+          echo "Simulator UDID: $UDID"
+          xcrun simctl boot "$UDID" || true
+          APP=$(find build/Build/Products -name "SimpleChat.app" -path "*iphonesimulator*" | head -1)
+          echo "App: $APP"
+          xcrun simctl install "$UDID" "$APP"
+          xcrun simctl launch "$UDID" com.simplechat.ios.app
+          sleep 4
+          xcrun simctl io "$UDID" screenshot launch.png
+          ls -la launch.png
+
+      - name: Upload launch screenshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: launch-screenshot
+          path: ios/launch.png
+
+      - name: Build unsigned device IPA
+        run: |
+          cd ios
+          xcodebuild -project SimpleChat.xcodeproj -scheme SimpleChat \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build-device build CODE_SIGNING_ALLOWED=NO CODE_SIGN_IDENTITY="" -quiet
+          APP=$(find build-device/Build/Products -name "SimpleChat.app" -path "*iphoneos*" | head -1)
+          echo "Device app: $APP"
+          mkdir -p Payload
+          cp -R "$APP" Payload/
+          zip -qry SimpleChat-unsigned.ipa Payload
+          ls -la SimpleChat-unsigned.ipa
+
+      - name: Upload unsigned IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: SimpleChat-unsigned-ipa
+          path: ios/SimpleChat-unsigned.ipa

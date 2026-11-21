@@ -1,0 +1,8 @@
+.DS_Store
+ios/SimpleChat.xcodeproj/
+ios/build/
+ios/build-device/
+ios/Payload/
+ios/*.ipa
+ios/launch.png
+xcuserdata/
