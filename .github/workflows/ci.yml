@@ -12,18 +12,16 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Generate Xcode project
-        run: brew install xcodegen && cd ios && xcodegen generate
+        run: brew install xcodegen && xcodegen generate
 
       - name: Build + run unit tests (iOS Simulator)
         run: |
-          cd ios
           xcodebuild -project SimpleChat.xcodeproj -scheme SimpleChat \
             -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
             -derivedDataPath build test CODE_SIGNING_ALLOWED=NO -quiet
 
       - name: Launch in simulator + screenshot (proof it runs)
         run: |
-          cd ios
           UDID=$(xcrun simctl list devices available | grep "iPhone 16 (" | head -1 | grep -oE '[A-F0-9-]{36}')
           echo "Simulator UDID: $UDID"
           xcrun simctl boot "$UDID" || true
@@ -39,11 +37,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: launch-screenshot
-          path: ios/launch.png
+          path: launch.png
 
       - name: Build unsigned device IPA
         run: |
-          cd ios
           xcodebuild -project SimpleChat.xcodeproj -scheme SimpleChat \
             -destination 'generic/platform=iOS' \
             -derivedDataPath build-device build CODE_SIGNING_ALLOWED=NO CODE_SIGN_IDENTITY="" -quiet
@@ -58,4 +55,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: SimpleChat-unsigned-ipa
-          path: ios/SimpleChat-unsigned.ipa
+          path: SimpleChat-unsigned.ipa
