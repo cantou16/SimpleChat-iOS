@@ -39,6 +39,56 @@ jobs:
           name: launch-screenshot
           path: launch.png
 
+      - name: iPhone XR class check (XR sim w/ iOS 18 if available, else iPhone 11)
+        continue-on-error: true
+        run: |
+          xcrun simctl list runtimes
+          xcrun simctl list devicetypes | grep -iE "iPhone XR|iPhone 11 " | head -3 || true
+
+          XR_RUNTIME=$(xcrun simctl list runtimes | grep -E "iOS 18\." | grep -oE "com\.apple\.CoreSimulator\.SimRuntime\.iOS-[0-9-]+" | head -1 || true)
+          LATEST_RUNTIME=$(xcrun simctl list runtimes | grep -oE "com\.apple\.CoreSimulator\.SimRuntime\.iOS-[0-9-]+" | tail -1)
+          echo "XR_RUNTIME=$XR_RUNTIME LATEST_RUNTIME=$LATEST_RUNTIME"
+
+          APP=$(find build/Build/Products -name "SimpleChat.app" -path "*iphonesimulator*" | head -1)
+          shoot() {
+            UDID=$(xcrun simctl create "test-$2" "$1" "$3" 2>/dev/null || true)
+            if [ -z "$UDID" ]; then echo "sim create failed: $2"; return 1; fi
+            xcrun simctl boot "$UDID" || true
+            xcrun simctl bootstatus "$UDID" -b
+            xcrun simctl install "$UDID" "$APP"
+            xcrun simctl launch "$UDID" com.simplechat.ios.app
+            sleep 4
+            xcrun simctl io "$UDID" screenshot "$2"
+            xcrun simctl delete "$UDID" || true
+          }
+
+          if [ -n "$XR_RUNTIME" ]; then
+            shoot com.apple.CoreSimulator.SimDeviceType.iPhone-XR launch-xr.png "$XR_RUNTIME" && echo "XR (iOS18) screenshot ok"
+          else
+            echo "no iOS 18 runtime; iPhone 11 has the same 1792x828 display class as XR"
+            shoot com.apple.CoreSimulator.SimDeviceType.iPhone-11 launch-xr.png "$LATEST_RUNTIME" && echo "iPhone11-class screenshot ok"
+          fi
+
+      - name: Upload XR-class screenshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: launch-xr-screenshot
+          path: launch-xr.png
+          if-no-files-found: ignore
+
+      - name: Package simulator .app zip (for Appetize browser testing)
+        run: |
+          APP=$(find build/Build/Products -name "SimpleChat.app" -path "*iphonesimulator*" | head -1)
+          mkdir -p simpkg && cp -R "$APP" simpkg/
+          cd simpkg && zip -qry SimpleChat-simulator-app.zip SimpleChat.app && cd ..
+          ls -la simpkg/SimpleChat-simulator-app.zip
+
+      - name: Upload simulator app zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: SimpleChat-simulator-app
+          path: simpkg/SimpleChat-simulator-app.zip
+
       - name: Build unsigned device IPA
         run: |
           xcodebuild -project SimpleChat.xcodeproj -scheme SimpleChat \
