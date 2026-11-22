@@ -74,7 +74,7 @@ struct SettingsView: View {
         model = s.model
         systemPrompt = s.systemPrompt
         useCompat = s.compatEnabled
-        apiKey = store.currentAPIKey()
+        draftKey = store.currentAPIKey()
     }
 
     private func save() {
