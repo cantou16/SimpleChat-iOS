@@ -9,6 +9,7 @@ struct SettingsView: View {
     @State private var model: String = ""
     @State private var draftKey: String = ""
     @State private var systemPrompt: String = ""
+    @State private var useCompat: Bool = true
 
     var body: some View {
         NavigationStack {
@@ -29,6 +30,17 @@ struct SettingsView: View {
                     SecureField("API Key", text: $draftKey)
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
+                }
+                Section("网络") {
+                    Toggle("兼容网络引擎", isOn: $useCompat)
+                        .onChange(of: useCompat) { value in
+                            var s = store.settings
+                            s.useCompatNetwork = value
+                            store.settings = s
+                        }
+                    Text("部分 iOS 18 机型在开启系统代理/加速器时会触发网络框架崩溃。兼容引擎绕开系统代理直连（HTTP/1.1）。")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
                 }
                 Section("系统提示词") {
                     TextEditor(text: $systemPrompt)
@@ -61,7 +73,8 @@ struct SettingsView: View {
         style = s.style
         model = s.model
         systemPrompt = s.systemPrompt
-        draftKey = store.currentAPIKey()
+        useCompat = s.compatEnabled
+        apiKey = store.currentAPIKey()
     }
 
     private func save() {

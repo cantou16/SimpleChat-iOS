@@ -10,6 +10,11 @@ struct AppSettings: Codable, Sendable {
     var systemPrompt: String = ""
     /// KeychainSecretBox 加密后的 API Key（base64 AES-GCM 密文）
     var encryptedAPIKey: String = ""
+    /// 兼容网络引擎开关：true 用 Network.framework（绕开 CFNetwork 系统代理崩溃），
+    /// false 用 URLSession。可选项以兼容旧存档（缺字段时按默认 true 处理）。
+    var useCompatNetwork: Bool? = nil
+
+    var compatEnabled: Bool { useCompatNetwork ?? true }
 }
 
 struct PersistedState: Codable, Sendable {
@@ -24,6 +29,7 @@ final class ChatStore: ObservableObject {
     @Published var lastError: String?
 
     private let client = StreamingChatClient()
+    private let compatClient = CompatHTTPClient()
     private var streamTask: Task<Void, Never>?
     private let fileURL: URL
 
@@ -133,7 +139,9 @@ final class ChatStore: ObservableObject {
         streamTask = Task { [weak self] in
             guard let self else { return }
             let history = self.conversation(conversationID)?.messages.dropLast().map { $0 } ?? []
-            let events = self.client.stream(config: config, messages: history)
+            let events: AsyncThrowingStream<ChatEvent, Error> = self.state.settings.compatEnabled
+                ? self.compatClient.stream(config: config, messages: history)
+                : self.client.stream(config: config, messages: history)
 
             do {
                 for try await event in events {
