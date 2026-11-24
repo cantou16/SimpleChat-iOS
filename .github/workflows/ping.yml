@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
 jobs:
+  mac:
+    runs-on: macos-13
+    steps:
+      - run: sw_vers; xcodebuild -version
   ping:
     runs-on: ubuntu-latest
     steps:
