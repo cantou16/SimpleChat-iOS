@@ -7,8 +7,8 @@ options:
 settings:
   base:
     SWIFT_VERSION: "5.0"
-    MARKETING_VERSION: 0.1.2
-    CURRENT_PROJECT_VERSION: 3
+    MARKETING_VERSION: 0.2.0
+    CURRENT_PROJECT_VERSION: 4
 targets:
   SimpleChat:
     type: application
@@ -18,9 +18,9 @@ targets:
     info:
       path: Support/Info.plist
       properties:
-        CFBundleDisplayName: SimpleChat
-        CFBundleShortVersionString: "0.1.2"
-        CFBundleVersion: "3"
+        CFBundleDisplayName: SimpleChat Plus
+        CFBundleShortVersionString: "0.2.0"
+        CFBundleVersion: "4"
         UILaunchScreen: {}
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
