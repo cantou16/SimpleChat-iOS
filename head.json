@@ -1,0 +1,113 @@
+{
+  "sha": "20bfc09f84ce0f871ec60cb8b14d577542341345",
+  "node_id": "C_kwDOV2uAWdoAKDIwYmZjMDlmODRjZTBmODcxZWM2MGNiOGIxNGQ1Nzc1NDIzNDEzNDU",
+  "commit": {
+    "author": {
+      "name": "cantou16",
+      "email": "cantou16@users.noreply.github.com",
+      "date": "2026-11-24T10:36:32Z"
+    },
+    "committer": {
+      "name": "cantou16",
+      "email": "cantou16@users.noreply.github.com",
+      "date": "2026-11-24T10:36:32Z"
+    },
+    "message": "feat(ios 0.2.0): SimpleChat Plus 品牌 + 代理/VPN 崩溃回归测试",
+    "tree": {
+      "sha": "1ed70f494e30df980352a79f1c95b9439d4e5099",
+      "url": "https://api.github.com/repos/cantou16/SimpleChat-iOS/git/trees/1ed70f494e30df980352a79f1c95b9439d4e5099"
+    },
+    "url": "https://api.github.com/repos/cantou16/SimpleChat-iOS/git/commits/20bfc09f84ce0f871ec60cb8b14d577542341345",
+    "comment_count": 0,
+    "verification": {
+      "verified": false,
+      "reason": "unsigned",
+      "signature": null,
+      "payload": null,
+      "verified_at": null
+    }
+  },
+  "url": "https://api.github.com/repos/cantou16/SimpleChat-iOS/commits/20bfc09f84ce0f871ec60cb8b14d577542341345",
+  "html_url": "https://github.com/cantou16/SimpleChat-iOS/commit/20bfc09f84ce0f871ec60cb8b14d577542341345",
+  "comments_url": "https://api.github.com/repos/cantou16/SimpleChat-iOS/commits/20bfc09f84ce0f871ec60cb8b14d577542341345/comments",
+  "author": {
+    "login": "cantou16",
+    "id": 359563697,
+    "node_id": "U_kgDOFW6BsQ",
+    "avatar_url": "https://avatars.githubusercontent.com/u/359563697?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/cantou16",
+    "html_url": "https://github.com/cantou16",
+    "followers_url": "https://api.github.com/users/cantou16/followers",
+    "following_url": "https://api.github.com/users/cantou16/following{/other_user}",
+    "gists_url": "https://api.github.com/users/cantou16/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/cantou16/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/cantou16/subscriptions",
+    "organizations_url": "https://api.github.com/users/cantou16/orgs",
+    "repos_url": "https://api.github.com/users/cantou16/repos",
+    "events_url": "https://api.github.com/users/cantou16/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/cantou16/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "committer": {
+    "login": "cantou16",
+    "id": 359563697,
+    "node_id": "U_kgDOFW6BsQ",
+    "avatar_url": "https://avatars.githubusercontent.com/u/359563697?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/cantou16",
+    "html_url": "https://github.com/cantou16",
+    "followers_url": "https://api.github.com/users/cantou16/followers",
+    "following_url": "https://api.github.com/users/cantou16/following{/other_user}",
+    "gists_url": "https://api.github.com/users/cantou16/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/cantou16/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/cantou16/subscriptions",
+    "organizations_url": "https://api.github.com/users/cantou16/orgs",
+    "repos_url": "https://api.github.com/users/cantou16/repos",
+    "events_url": "https://api.github.com/users/cantou16/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/cantou16/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "parents": [
+    {
+      "sha": "523c0fd0371a99ff0105c25243e5477337e0785a",
+      "url": "https://api.github.com/repos/cantou16/SimpleChat-iOS/commits/523c0fd0371a99ff0105c25243e5477337e0785a",
+      "html_url": "https://github.com/cantou16/SimpleChat-iOS/commit/523c0fd0371a99ff0105c25243e5477337e0785a"
+    }
+  ],
+  "stats": {
+    "total": 70,
+    "additions": 65,
+    "deletions": 5
+  },
+  "files": [
+    {
+      "sha": "2b2f81ebf9937443299cecc8ef6aa595cae29e40",
+      "filename": "Tests/ProxyEnvironmentTests.swift",
+      "status": "added",
+      "additions": 60,
+      "deletions": 0,
+      "changes": 60,
+      "blob_url": "https://github.com/cantou16/SimpleChat-iOS/blob/20bfc09f84ce0f871ec60cb8b14d577542341345/Tests%2FProxyEnvironmentTests.swift",
+      "raw_url": "https://github.com/cantou16/SimpleChat-iOS/raw/20bfc09f84ce0f871ec60cb8b14d577542341345/Tests%2FProxyEnvironmentTests.swift",
+      "contents_url": "https://api.github.com/repos/cantou16/SimpleChat-iOS/contents/Tests%2FProxyEnvironmentTests.swift?ref=20bfc09f84ce0f871ec60cb8b14d577542341345",
+      "patch": "@@ -0,0 +1,60 @@\n+import XCTest\n+@testable import SimpleChat\n+\n+/// 模拟“挂了系统代理 / VPN”的环境：CFNetwork 曾经在初始化转义路径时崩\n+/// （-[__NSCFNumber length]: unrecognized selector）。这里把代理指到一个不可用端口，\n+/// 断言请求只会失败（或超时），进程不能崩。\n+final class ProxyEnvironmentTests: XCTestCase {\n+\n+    /// URLSession + 系统代理字典：不应崩溃，只应返回错误。\n+    func testURLSessionWithBrokenProxyDoesNotCrash() {\n+        let configuration = URLSessionConfiguration.ephemeral\n+        configuration.connectionProxyDictionary = [\n+            \"HTTPEnable\": true,\n+            \"HTTPProxy\": \"127.0.0.1\",\n+            \"HTTPPort\": 9,\n+            \"HTTPSEnable\": true,\n+            \"HTTPSProxy\": \"127.0.0.1\",\n+            \"HTTPSPort\": 9,\n+        ]\n+        configuration.timeoutIntervalForRequest = 5\n+\n+        let session = URLSession(configuration: configuration)\n+        let done = expectation(description: \"request finished without crashing\")\n+        var request = URLRequest(url: URL(string: \"https://api.deepseek.com/v1/models\")!)\n+        request.httpMethod = \"GET\"\n+        request.timeoutInterval = 5\n+\n+        let task = session.dataTask(with: request) { data, response, error in\n+            // 走到这里就说明没有崩：代理不可用应当报错，而不是让进程退出。\n+            XCTAssertTrue(error != nil || response != nil, \"expected error or response, got neither (data=\\(String(describing: data?.count)))\")\n+            done.fulfill()\n+        }\n+        task.resume()\n+        wait(for: [done], timeout: 15)\n+        session.invalidateAndCancel()\n+    }\n+\n+    /// 兼容引擎（Network.framework）不读系统代理；指向本机空端口时应当以普通错误结束。\n+    func testCompatEngineBypassesProxyAndFailsGracefully() async {\n+        let config = EndpointConfig(\n+            style: .openAICompatible,\n+            endpoint: \"http://127.0.0.1:9\",\n+            apiKey: \"sk-test\",\n+            model: \"test\",\n+            systemPrompt: nil\n+        )\n+        let client = CompatHTTPClient()\n+        let messages = [ChatMessage(role: .user, text: \"hello\")]\n+        do {\n+            for try await _ in client.stream(config: config, messages: messages) {\n+                XCTFail(\"unexpected event from a closed port\")\n+            }\n+            XCTFail(\"expected a network error\")\n+        } catch is ChatError {\n+            // 预期：普通网络错误，而不是崩溃。\n+        } catch {\n+            // 任何非崩溃错误都可以接受。\n+        }\n+    }\n+}"
+    },
+    {
+      "sha": "baf5ffef806d7797140a1dc4203dc09163331589",
+      "filename": "project.yml",
+      "status": "modified",
+      "additions": 5,
+      "deletions": 5,
+      "changes": 10,
+      "blob_url": "https://github.com/cantou16/SimpleChat-iOS/blob/20bfc09f84ce0f871ec60cb8b14d577542341345/project.yml",
+      "raw_url": "https://github.com/cantou16/SimpleChat-iOS/raw/20bfc09f84ce0f871ec60cb8b14d577542341345/project.yml",
+      "contents_url": "https://api.github.com/repos/cantou16/SimpleChat-iOS/contents/project.yml?ref=20bfc09f84ce0f871ec60cb8b14d577542341345",
+      "patch": "@@ -7,8 +7,8 @@ options:\n settings:\n   base:\n     SWIFT_VERSION: \"5.0\"\n-    MARKETING_VERSION: 0.1.2\n-    CURRENT_PROJECT_VERSION: 3\n+    MARKETING_VERSION: 0.2.0\n+    CURRENT_PROJECT_VERSION: 4\n targets:\n   SimpleChat:\n     type: application\n@@ -18,9 +18,9 @@ targets:\n     info:\n       path: Support/Info.plist\n       properties:\n-        CFBundleDisplayName: SimpleChat\n-        CFBundleShortVersionString: \"0.1.2\"\n-        CFBundleVersion: \"3\"\n+        CFBundleDisplayName: SimpleChat Plus\n+        CFBundleShortVersionString: \"0.2.0\"\n+        CFBundleVersion: \"4\"\n         UILaunchScreen: {}\n         UISupportedInterfaceOrientations:\n           - UIInterfaceOrientationPortrait"
+    }
+  ]
+}
