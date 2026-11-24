@@ -6,3 +6,6 @@ ios/Payload/
 ios/*.ipa
 ios/launch.png
 xcuserdata/
+*.json
+launch*.png
+simpkg/
