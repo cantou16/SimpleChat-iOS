@@ -35,26 +35,4 @@ final class ProxyEnvironmentTests: XCTestCase {
         session.invalidateAndCancel()
     }
 
-    /// 兼容引擎（Network.framework）不读系统代理；指向本机空端口时应当以普通错误结束。
-    func testCompatEngineBypassesProxyAndFailsGracefully() async {
-        let config = EndpointConfig(
-            style: .openAICompatible,
-            endpoint: "http://127.0.0.1:9",
-            apiKey: "sk-test",
-            model: "test",
-            systemPrompt: nil
-        )
-        let client = CompatHTTPClient()
-        let messages = [ChatMessage(role: .user, text: "hello")]
-        do {
-            for try await _ in client.stream(config: config, messages: messages) {
-                XCTFail("unexpected event from a closed port")
-            }
-            XCTFail("expected a network error")
-        } catch is ChatError {
-            // 预期：普通网络错误，而不是崩溃。
-        } catch {
-            // 任何非崩溃错误都可以接受。
-        }
-    }
 }

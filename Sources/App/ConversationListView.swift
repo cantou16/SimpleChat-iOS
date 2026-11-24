@@ -106,8 +106,7 @@ struct ChatView: View {
             TextField("发消息…", text: $input, axis: .vertical)
                 .lineLimit(1...5)
                 .padding(10)
-                .background(Color(.secondarySystemBackground))
-                .clipShape(RoundedRectangle(cornerRadius: 18))
+                .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
 
             if store.streamingConversationID == conversationID {
                 Button { store.stop() } label: {
@@ -122,6 +121,9 @@ struct ChatView: View {
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
+        .glassSurface(cornerRadius: 26, strong: true)
+        .padding(.horizontal, 10)
+        .padding(.bottom, 6)
     }
 
     private func send() {
@@ -163,8 +165,11 @@ struct MessageBubble: View {
                 }
             }
             .padding(12)
-            .background(message.role == .user ? Color.accentColor.opacity(0.25) : Color(.secondarySystemBackground))
-            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .glassSurface(
+                cornerRadius: 18,
+                tint: message.role == .user ? Color.accentColor : .clear,
+                strong: message.role == .user
+            )
             if message.role == .assistant { Spacer(minLength: 40) }
         }
     }

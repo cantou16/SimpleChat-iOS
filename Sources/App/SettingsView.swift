@@ -50,8 +50,8 @@ struct SettingsView: View {
                     Button("保存") { save() }
                 }
                 Section("关于") {
-                    LabeledContent("版本", value: "0.1.0 (iOS 移植)")
-                    Text("基于 Pokanshuu/Simple-Chat (MIT) 的 iOS 原生移植。功能子集：双协议流式对话、思考链展示、Keychain 加密存 Key。")
+                    LabeledContent("版本", value: "0.2.0 (SimpleChat Plus)")
+                    Text("基于 Pokanshuu/Simple-Chat (MIT) 的 iOS 原生移植。双协议流式对话、思考链展示、Keychain 加密存 Key；界面采用玻璃材质，对齐 iOS 26 的 Liquid Glass。")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                 }

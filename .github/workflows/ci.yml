@@ -18,7 +18,7 @@ jobs:
         run: |
           xcodebuild -project SimpleChat.xcodeproj -scheme SimpleChat \
             -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
-            -derivedDataPath build test CODE_SIGNING_ALLOWED=NO -quiet
+            -derivedDataPath build test CODE_SIGNING_ALLOWED=NO \n            -test-timeouts-enabled YES -default-test-execution-time-allowance 60 -quiet
 
       - name: Launch in simulator + screenshot (proof it runs)
         run: |
